@@ -6,23 +6,21 @@ import { WinnerModal } from "./components/WinnerModal.jsx";
 import { saveGameToStorage, resetGameStorage } from "./logic/storage/index.js";
 import React from "react";
 
-function App (appProp) {
+function App () {
 
-  const { board, turn, winner, setBoard, setTurn, setWinner } = appProp;
+  const [board, setBoard] = useState(() => {
+    const boardFromStorage = window.localStorage.getItem("board");
+    if (boardFromStorage) return JSON.parse(boardFromStorage);
+    return Array(9).fill(null);
+  });
 
-  // const [board, setBoard] = useState(() => {
-  //   const boardFromStorage = window.localStorage.getItem("board");
-  //   if (boardFromStorage) return JSON.parse(boardFromStorage);
-  //   return Array(9).fill(null);
-  // });
+  const [turn, setTurn] = useState(() => {
+    const turnFromStorage = window.localStorage.getItem("turn");
+    return turnFromStorage ?? TURNS.X;
+  });
 
-  // const [turn, setTurn] = useState(() => {
-  //   const turnFromStorage = window.localStorage.getItem("turn");
-  //   return turnFromStorage ?? TURNS.X;
-  // });
-
-  // // null es que no hay ganador, false es que hay un empate
-  // const [winner, setWinner] = useState(null);
+  // null es que no hay ganador, false es que hay un empate
+  const [winner, setWinner] = useState(null);
 
   const resetGame = () => {
 
@@ -62,7 +60,9 @@ function App (appProp) {
 
   return (
     <article className="board">
-      <article className="game">
+        <button onClick={resetGame}>Reset del juego</button>
+
+      <div className="game">
         {board.map((square, index) => {
           return (
             <Square key={index} index={index} updateBoard={updateBoard}>
@@ -70,12 +70,12 @@ function App (appProp) {
             </Square>
           );
         })}
-      </article>
+      </div>
 
-      <article className="turn">
+      <div className="turn">
         <Square isSelected={turn === TURNS.X}>{TURNS.X}</Square>
         <Square isSelected={turn === TURNS.O}>{TURNS.O}</Square>
-      </article>
+      </div>
 
       <WinnerModal resetGame={resetGame} winner={winner} />
     </article>
