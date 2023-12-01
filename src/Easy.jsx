@@ -4,19 +4,44 @@ import { TURNS } from "./constants.js";
 import { checkWinnerFrom, checkEndGame } from "./logic/board.js";
 import { saveGameToStorage, resetGameStorage } from "./logic/storage/index.js";
 import { WinnerModal } from "./components/WinnerModal.jsx";
-const tf = require("@tensorflow/tfjs");
+// const tf = require("@tensorflow/tfjs");
+import * as tf from "@tensorflow/tfjs";
 
 function Easy() {
 
     const model = null;
-    const modelUrl = "./models/model_medium.h5";
+    const modelUrl = "./models/model_medium.json";
+
+    fetch(modelUrl)
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+        })
+        .catch((error) => {
+            console.error("Error al obtener el contenido del archivo:", error);
+        });
 
     // TODO: añadir lógica para cambio de modelo
-    (async () => {
-        console.log("Cargando modelo...");
-        model = await tf.loadLayersModel(modelUrl);
-        console.log("Modelo cargado...");
-    })();
+    // TODO: recibir por props
+    // (async () => {
+    //     console.log("Cargando modelo...");
+    //     model = await tf.loadLayersModel
+    //     console.log("Modelo cargado...");
+    // })();
+
+    // fetch(modelUrl)
+    //     .then((response) => response.json())
+    //     .then((modelJson) => {
+    //         // Cargar el modelo usando el JSON obtenido
+    //         const model = tf.sequential(modelJson);
+
+    //         console.log("Modelo cargado exitosamente:", model);
+    //         // Ahora puedes usar el modelo para hacer inferencias
+    //         // Por ejemplo, model.predict(inputData)
+    //     })
+    //     .catch((error) => {
+    //         console.error("Error al cargar el modelo JSON:", error);
+    //     });
     
     const [board, setBoard] = useState(() => {
         const boardFromStorage = window.localStorage.getItem("board");
