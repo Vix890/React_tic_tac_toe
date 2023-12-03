@@ -60,7 +60,9 @@ function App () {
 
   return (
     <article className="board">
-        <button onClick={resetGame}>Reset del juego</button>
+      <h2>Player vs Player</h2>
+
+      <button onClick={resetGame}>Reset del juego</button>
 
       <div className="game">
         {board.map((square, index) => {
