@@ -19,27 +19,29 @@ function Easy() {
     })();
     
     const [board, setBoard] = useState(() => {
-        const boardFromStorage = window.localStorage.getItem("board");
-        if (boardFromStorage) return JSON.parse(boardFromStorage);
         return Array(9).fill(null);
     });
 
-    const [turn, setTurn] = useState(() => {
-        const turnFromStorage = window.localStorage.getItem("turn");
-        return turnFromStorage ?? TURNS.X;
+    let [turn, setTurn] = useState(() => {
+        return Math.random() < 0.5 ? TURNS.X : TURNS.O;
     });
-
+    
     // ? null es que no hay ganador, false es que hay un empate
     const [winner, setWinner] = useState(null);
-
+    
+    const tossCoin = () => {
+        return Math.random() < 0.5 ? TURNS.X : TURNS.O;
+    }
     // IA
     const moveIA = () => {
 
-        if (turn === TURNS.X || winner) return;
+        // if (turn === TURNS.X || winner) return;
 
         const status = boardStatus();
         
         const legalMoves = legalMovesGenerator(status);
+
+        if (Object.keys(legalMoves).length === 0) return null;
 
         const selectedMove = moveSelector(legalMoves);
 
@@ -122,7 +124,7 @@ function Easy() {
     
     const resetGame = () => {
         setBoard(Array(9).fill(null));
-        setTurn(TURNS.X);
+        setTurn(Math.random() < 0.5 ? TURNS.X : TURNS.O);
         setWinner(null);
 
         resetGameStorage();
@@ -134,39 +136,50 @@ function Easy() {
         if (board[index] || winner) return;
 
         // ? actualizar el tablero
-        const newBoard = [...board];
-        newBoard[index] = turn;
-        setBoard(newBoard);
-
-        console.log(board);
-        console.log(newBoard);
+        board[index] = turn;
+        setBoard([...board]);
 
         // ? cambiar el turno
         const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
+        turn = newTurn;
         setTurn(newTurn);
+
+        // console.log('turn: ', turn);
+        console.log('newTurn: ', newTurn);
 
         // ? guardar aqui partida
         saveGameToStorage({
-            board: newBoard,
+            board: board,
             turn: newTurn,
         });
 
         // revisar si hay ganador
-        const newWinner = checkWinnerFrom(newBoard);
+        const newWinner = checkWinnerFrom(board);
 
         // * Resultado
         if (newWinner) {
             setWinner(newWinner);
-        } else if (checkEndGame(newBoard)) {
+            return;
+        } else if (checkEndGame(board)) {
             setWinner(false); // empate
+            return;
         }
     };
 
     const handleMove = (index) => {
+
         updateBoard(index);
-        console.log(board);
-        console.log(turn);
-        moveIA(turn);
+
+        setTimeout(() => {
+            moveIA();
+        }, 500);
+
+
+
+
+
+
+        return;
     };
 
     return (
