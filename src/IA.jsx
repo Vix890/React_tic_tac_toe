@@ -11,7 +11,7 @@ function Easy() {
 
     // ? los modelos en public, si no el servidor no los carga
     var model = null;
-    let modelUrl = process.env.PUBLIC_URL + "/models/hard/model.json";
+    let modelUrl = process.env.PUBLIC_URL + "/model/model.json";
 
     // ? carga del modelo
     (async () => {
@@ -105,7 +105,6 @@ function Easy() {
         return false;
     }
     
-
     const moveSelector = (legalMoves) => {
     
         const tracker = {};
@@ -173,12 +172,6 @@ function Easy() {
         setTimeout(() => {
             moveIA();
         }, 500);
-
-
-
-
-
-
         return;
     };
 

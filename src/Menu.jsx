@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from "react";
 import { resetGameStorage } from "./logic/storage/index.js";
 import Pvp from "./Pvp.jsx";
-import Easy from "./Easy.jsx";
+import IA from "./IA.jsx";
 import "./index.css";
 
 function Menu() {
@@ -27,7 +27,7 @@ function Menu() {
                 return <Pvp />;
 
             case "ia":
-                return <Easy />;
+                return <IA />;
 
             default:
                 return <Pvp />;
